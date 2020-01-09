@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/abhishekvispute/Ethereum_Implementation#readme",
   "dependencies": {
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "js-sha3": "^0.8.0"
   }
 }
