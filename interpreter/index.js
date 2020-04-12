@@ -1,18 +1,18 @@
-const STOP = 'STOP';
-const ADD = 'ADD';
-const SUB = 'SUB';
-const MUL = 'MUL';
-const DIV = 'DIV';
-const PUSH = 'PUSH';
-const LT = 'LT';
-const GT = 'GT';
-const EQ = 'EQ';
-const AND = 'AND';
-const OR = 'OR';
-const JUMP = 'JUMP';
-const JUMPI = 'JUMPI';
-const STORE = 'STORE';
-const LOAD = 'LOAD';
+const STOP = "STOP";
+const ADD = "ADD";
+const SUB = "SUB";
+const MUL = "MUL";
+const DIV = "DIV";
+const PUSH = "PUSH";
+const LT = "LT";
+const GT = "GT";
+const EQ = "EQ";
+const AND = "AND";
+const OR = "OR";
+const JUMP = "JUMP";
+const JUMPI = "JUMPI";
+const STORE = "STORE";
+const LOAD = "LOAD";
 
 const OPCODE_MAP = {
   STOP,
@@ -50,7 +50,7 @@ const OPCODE_GAS_MAP = {
   LOAD: 5
 };
 
-const EXECUTION_COMPLETE = 'Execution complete';
+const EXECUTION_COMPLETE = "Execution complete";
 const EXECUTION_LIMIT = 10000;
 
 class Interpreter {
@@ -67,10 +67,7 @@ class Interpreter {
   jump() {
     const destination = this.state.stack.pop();
 
-    if (
-      destination < 0
-      || destination > this.state.code.length
-    ) {
+    if (destination < 0 || destination > this.state.code.length) {
       throw new Error(`Invalid destination: ${destination}`);
     }
 
@@ -169,7 +166,7 @@ class Interpreter {
       } catch (error) {
         if (error.message === EXECUTION_COMPLETE) {
           return {
-            result: this.state.stack[this.state.stack.length-1],
+            result: this.state.stack[this.state.stack.length - 1],
             gasUsed
           };
         }

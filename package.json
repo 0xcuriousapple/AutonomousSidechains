@@ -4,7 +4,14 @@
   "description": "Own version of Ethereum (Ethereum Implementation from scratch). \r Ethereum can be described in two words. \r It's a:  Decentralized Computer. A decentralized computer is like a normal computer. \r A normal computer executes a program using one machine.  \r But a decentralized computer executes a program using multiple machines. \r Every machine needs to agree upon the output of the program for its results to become official. \r To build a decentralized computer, here are the essential elements:  \r A smart contract language. \r A blockchain. \r A network. \r Transactions and accounts. \r A state management data structure.",
   "main": "index.js",
   "scripts": {
+    "api-test": "node ./api-test.js",
+    "dev": "nodemon ./api",
+    "dev-peer": "nodemon .api --peer",
+    "start": "node ./api",
     "test": "jest --watchALL"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -18,7 +25,16 @@
   },
   "homepage": "https://github.com/abhishekvispute/Ethereum_Implementation#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "elliptic": "^6.5.2",
+    "express": "^4.17.1",
     "jest": "^24.9.0",
-    "js-sha3": "^0.8.0"
+    "js-sha3": "^0.8.0",
+    "lodash": "^4.17.15",
+    "pubnub": "^4.27.3",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
