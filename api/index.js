@@ -27,13 +27,16 @@ app.use(bodyParser.json());
 const state = new State();
 const blockchain = new Blockchain({ state });
 const transactionQueue = new TransactionQueue();
-var credentials = JSON.stringify(main_credentials);
-const pubsub = new PubSub({ blockchain, transactionQueue, credentials });
+const pubsub = new PubSub({
+  blockchain,
+  transactionQueue,
+  credentials: JSON.stringify(main_credentials),
+});
 const account = new Account();
 const transaction = Transaction.createTransaction({ account });
 
 const sidechain_state = new State();
-const sidechain = new Blockchain({ sidechain_state });
+const sidechain = new Blockchain({ state: sidechain_state });
 const sidechain_transactionQueue = new TransactionQueue();
 const sidechain_pubsub = new PubSub({
   blockchain: sidechain,
