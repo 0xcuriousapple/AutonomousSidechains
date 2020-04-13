@@ -6,7 +6,7 @@
   "scripts": {
     "api-test": "node ./api-test.js",
     "dev": "nodemon ./api",
-    "dev-peer": "nodemon .api --peer",
+    "dev-peer": "nodemon ./api --peer",
     "start": "node ./api",
     "test": "jest --watchALL"
   },

@@ -9,59 +9,22 @@ const State = require("../store/state");
 const Transaction = require("../transaction");
 const TransactionQueue = require("../transaction/transaction-queue");
 
-const Main_Keys = require("./Mainchain_Keys.json");
-const Side_Keys = require("./Sidechain_Keys.json");
-const main_credentials = {
-  publishKey: Main_Keys.Publish,
-  subscribeKey: Main_Keys.Subscribe,
-  secretKey: Main_Keys.Secret,
-};
-const side_credentials = {
-  publishKey: Side_Keys.Publish,
-  subscribeKey: Side_Keys.Subscribe,
-  secretKey: Side_Keys.Secret,
-};
 const app = express();
 app.use(bodyParser.json());
 
 const state = new State();
 const blockchain = new Blockchain({ state });
 const transactionQueue = new TransactionQueue();
-var credentials = JSON.stringify(main_credentials);
-const pubsub = new PubSub({ blockchain, transactionQueue, credentials });
+const pubsub = new PubSub({ blockchain, transactionQueue });
 const account = new Account();
 const transaction = Transaction.createTransaction({ account });
-
-const sidechain_state = new State();
-const sidechain = new Blockchain({ sidechain_state });
-const sidechain_transactionQueue = new TransactionQueue();
-const sidechain_pubsub = new PubSub({
-  blockchain: sidechain,
-  transactionQueue: sidechain_transactionQueue,
-  credentials: JSON.stringify(side_credentials),
-});
-const sidechain_account = new Account();
-console.log(sidechain_account);
-const sidechain_transaction = Transaction.createTransaction({
-  account: sidechain_account,
-});
 
 setTimeout(() => {
   pubsub.broadcastTransaction(transaction);
 }, 500);
 
-setTimeout(() => {
-  sidechain_pubsub.broadcastTransaction(sidechain_transaction);
-}, 500);
-
 app.get("/blockchain", (req, res, next) => {
   const { chain } = blockchain;
-
-  res.json({ chain });
-});
-
-app.get("/sidechain", (req, res, next) => {
-  const { chain } = sidechain;
 
   res.json({ chain });
 });
@@ -79,25 +42,6 @@ app.get("/blockchain/mine", (req, res, next) => {
     .addBlock({ block, transactionQueue })
     .then(() => {
       pubsub.broadcastBlock(block);
-
-      res.json({ block });
-    })
-    .catch(next);
-});
-
-app.get("/sidechain/mine", (req, res, next) => {
-  const lastBlock = sidechain.chain[sidechain.chain.length - 1];
-  const block = Block.mineBlock({
-    lastBlock,
-    beneficiary: sidechain_account.address,
-    transactionSeries: sidechain_transactionQueue.getTransactionSeries(),
-    stateRoot: sidechain_state.getStateRoot(),
-  });
-  console.log("sd");
-  sidechain
-    .addBlock({ block, transactionQueue: sidechain_transactionQueue })
-    .then(() => {
-      sidechain_pubsub.broadcastBlock(block);
 
       res.json({ block });
     })
