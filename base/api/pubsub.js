@@ -9,6 +9,7 @@ const CHANNELS_MAP = {
 
 class PubSub {
   constructor({ blockchain, transactionQueue, credentials }) {
+    console.log(credentials);
     this.credentials = JSON.parse(credentials);
     this.pubnub = new PubNub(this.credentials);
     this.blockchain = blockchain;

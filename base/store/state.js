@@ -1,8 +1,9 @@
-const Trie = require('./trie');
+const Trie = require("./trie");
 
 class State {
   constructor() {
     this.stateTrie = new Trie();
+    // console.log(this.stateTrie);
     this.storageTrieMap = {};
   }
 
@@ -15,8 +16,8 @@ class State {
       key: address,
       value: {
         ...accountData,
-        storageRoot: this.storageTrieMap[address].rootHash
-      }
+        storageRoot: this.storageTrieMap[address].rootHash,
+      },
     });
   }
 
@@ -28,5 +29,5 @@ class State {
     return this.stateTrie.rootHash;
   }
 }
-
+// s = new State();
 module.exports = State;
