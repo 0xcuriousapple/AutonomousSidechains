@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+  p Address :#{address}
+  p Balance :#{balance}
+  p Transfer funds :
+
+  form(class="form-signin" method="POST" action="./transfer")
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            div.in
+              input(type="text" name="to" placeholder="Receiever Address" class="form-control" required autofocus)
+              input(type="text" name="value" placeholder="Amount" class="form-control" required autofocus)
+              - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block','buttonClass'];
+              button(class=buttonClass type="submit") Transfer
+              p
+              p Note : This only add transaction to pool, It will be finalized once mined.
+
+  

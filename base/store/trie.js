@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const { keccakHash } = require('../util');
+const _ = require("lodash");
+const { keccakHash } = require("../util");
 
 class Node {
   constructor() {

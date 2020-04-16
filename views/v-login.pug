@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  p Enter your details
+
+  form(class="form-signin" method="POST" action="./login/verify")
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            div.in
+              input(type="text" name="pubkey" placeholder="Public key/address" class="form-control" required autofocus)
+              input(type="text" name="prikey" placeholder="Private key"  class="form-control" required autofocus)
+              - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block','buttonClass'];
+              button(class=buttonClass type="submit") Log in
+              

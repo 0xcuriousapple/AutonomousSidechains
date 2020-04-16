@@ -1,4 +1,5 @@
 var express = require("express");
+const { ec, keccakHash } = require("../base/util");
 var router = express.Router();
 
 const request = require("request");
@@ -61,7 +62,64 @@ router.get("/mine", (req, res, next) => {
     .catch(next);
 });
 
+/*
+Pending
+
+This block was to add login functionality to wallet
+But as our state, account and chain in memory only
+this is too cumberstone
+
+Add login once everything is stored on local db
+
+router.get("/login", (req, res, next) => {
+  res.render("v-login", { title: "Mainchain" });
+});
+
+router.post("/login/Verify", function (req, res, next) {
+  console.log(req.body.pubkey);
+  var pubPoint = ec.keyFromSecret(req.body.prikey).getPublic();
+  // let signature = ec.sign(msgHash, privKey, "hex", { canonical: true });
+  // console.log(signature);
+  // req.body.prikey;
+
+  res.render("v-sidechain-new-step2", {
+    title: "Sidechain",
+    id: id,
+    pubkey: account.address,
+    prikey: account.privateKey,
+  });
+});
+
+*/
 // router.get("/join", function (req, res, next) {
 //   res.render("v-index", { title: "Sidechain" });
 // });
+
+router.get("/wallet", (req, res, next) => {
+  console.log(account.address);
+  const balance = Account.calculateBalance({
+    address: account.address,
+    state,
+  });
+  res.render("v-wallet", {
+    title: "Wallet",
+    address: account.address,
+
+    balance: balance,
+  });
+});
+
+router.post("/transfer", function (req, res, next) {
+  //Currently in front end only value transfer is mentioned but follwing code is appliable to contracts too
+  const { code, gasLimit, to, value } = req.body;
+  const transaction = Transaction.createTransaction({
+    account: !to ? new Account({ code }) : account,
+    gasLimit,
+    to,
+    value,
+  });
+  pubsub.broadcastTransaction(transaction);
+  res.json({ transaction });
+});
+
 module.exports = router;

@@ -35,3 +35,6 @@ a {
   font-size: 14px;
   font: inherit;
 }
+.indevelopment {
+  font-style: italic;
+}

@@ -1,19 +1,19 @@
-const { ec, keccakHash } = require('../util');
-const { STARTING_BALANCE } = require('../config');
+const { ec, keccakHash } = require("../util");
+const { STARTING_BALANCE } = require("../config");
 
 class Account {
   constructor({ code } = {}) {
     this.keyPair = ec.genKeyPair();
-    this.address = this.keyPair.getPublic().encode('hex');
+    this.address = this.keyPair.getPublic().encode("hex");
+    this.privateKey = this.keyPair.getPrivate().toString();
     this.balance = STARTING_BALANCE;
     this.code = code || [];
     this.generateCodeHash();
   }
 
   generateCodeHash() {
-    this.codeHash = this.code.length > 0
-      ? keccakHash(this.address + this.code)
-      : null;
+    this.codeHash =
+      this.code.length > 0 ? keccakHash(this.address + this.code) : null;
   }
 
   sign(data) {
@@ -25,12 +25,12 @@ class Account {
       address: this.address,
       balance: this.balance,
       code: this.code,
-      codeHash: this.codeHash
+      codeHash: this.codeHash,
     };
   }
 
   static verifySignature({ publicKey, data, signature }) {
-    const keyFromPublic = ec.keyFromPublic(publicKey, 'hex');
+    const keyFromPublic = ec.keyFromPublic(publicKey, "hex");
 
     return keyFromPublic.verify(keccakHash(data), signature);
   }
@@ -39,5 +39,4 @@ class Account {
     return state.getAccount({ address }).balance;
   }
 }
-
 module.exports = Account;

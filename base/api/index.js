@@ -96,7 +96,7 @@ app.get("/sidechain/mine", (req, res, next) => {
     transactionSeries: sidechain_transactionQueue.getTransactionSeries(),
     stateRoot: sidechain_state.getStateRoot(),
   });
-  console.log("sd");
+  //console.log("sd");
   sidechain
     .addBlock({ block, transactionQueue: sidechain_transactionQueue })
     .then(() => {

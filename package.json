@@ -8,7 +8,8 @@
     "dev": "nodemon ./base/api",
     "dev-peer": "nodemon ./base/api --peer",
     "start": "node ./base/api",
-    "sidechain": "node ./bin/www",
+    "betadev": "nodemon ./bin/www",
+    "beta": "node ./bin/www",
     "test": "jest --watchALL"
   },
   "jest": {

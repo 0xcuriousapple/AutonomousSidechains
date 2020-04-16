@@ -45,19 +45,26 @@ router.post("/new/step1", function (req, res, next) {
   const account = new Account();
   const transaction = Transaction.createTransaction({ account });
 
-  console.log(sidechain_instance.identifier);
   setTimeout(() => {
     sidechain_instance.pubsub.broadcastTransaction(transaction);
   }, 500);
 
+  //mining this transaction as there is single user only
+
   //Storing in map
   sidechainStore[id] = sidechain_instance;
+  console.log(Object.keys(sidechainStore).length);
 
   res.render("v-sidechain-new-step2", {
     title: "Sidechain",
     id: id,
     pubkey: account.address,
+    prikey: account.privateKey,
   });
+});
+
+router.get("/login ", function (req, res, next) {
+  res.render("v-login", { title: "Sidechain" });
 });
 
 module.exports = router;

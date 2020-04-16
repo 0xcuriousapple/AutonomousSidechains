@@ -1,22 +1,22 @@
-const uuid = require('uuid/v4');
-const Account = require('../account');
-const Interpreter = require('../interpreter');
-const { MINING_REWARD } = require('../config');
+const uuid = require("uuid/v4");
+const Account = require("../account");
+const Interpreter = require("../interpreter");
+const { MINING_REWARD } = require("../config");
 
 const TRANSACTION_TYPE_MAP = {
-  CREATE_ACCOUNT: 'CREATE_ACCOUNT',
-  TRANSACT: 'TRANSACT',
-  MINING_REWARD: 'MINING_REWARD'
+  CREATE_ACCOUNT: "CREATE_ACCOUNT",
+  TRANSACT: "TRANSACT",
+  MINING_REWARD: "MINING_REWARD",
 };
 
 class Transaction {
   constructor({ id, from, to, value, data, signature, gasLimit }) {
     this.id = id || uuid();
-    this.from = from || '-';
-    this.to = to || '-';
+    this.from = from || "-";
+    this.to = to || "-";
     this.value = value || 0;
-    this.data = data || '-';
-    this.signature = signature || '-';
+    this.data = data || "-";
+    this.signature = signature || "-";
     this.gasLimit = gasLimit || 0;
   }
 
@@ -26,7 +26,7 @@ class Transaction {
         to: beneficiary,
         value: MINING_REWARD,
         gasLimit,
-        data: { type: TRANSACTION_TYPE_MAP.MINING_REWARD }
+        data: { type: TRANSACTION_TYPE_MAP.MINING_REWARD },
       });
     }
 
@@ -37,20 +37,20 @@ class Transaction {
         to,
         value: value || 0,
         gasLimit: gasLimit || 0,
-        data: { type: TRANSACTION_TYPE_MAP.TRANSACT }
+        data: { type: TRANSACTION_TYPE_MAP.TRANSACT },
       };
 
       return new Transaction({
         ...transactionData,
-        signature: account.sign(transactionData)
+        signature: account.sign(transactionData),
       });
     }
 
     return new Transaction({
       data: {
         type: TRANSACTION_TYPE_MAP.CREATE_ACCOUNT,
-        accountData: account.toJSON()
-      }
+        accountData: account.toJSON(),
+      },
     });
   }
 
@@ -60,39 +60,43 @@ class Transaction {
       const transactionData = { ...transaction };
       delete transactionData.signature;
 
-      if (!Account.verifySignature({
-        publicKey: from,
-        data: transactionData,
-        signature
-      })) {
+      if (
+        !Account.verifySignature({
+          publicKey: from,
+          data: transactionData,
+          signature,
+        })
+      ) {
         return reject(new Error(`Transaction ${id} signature is invalid`));
       }
 
       const fromBalance = state.getAccount({ address: from }).balance;
 
-      if ((value + gasLimit) > fromBalance) {
-        return reject(new Error(
-          `Transaction value and gasLimit: ${value} exceeds balance: ${fromBalance}`
-        ));
+      if (value + gasLimit > fromBalance) {
+        return reject(
+          new Error(
+            `Transaction value and gasLimit: ${value} exceeds balance: ${fromBalance}`
+          )
+        );
       }
 
       const toAccount = state.getAccount({ address: to });
 
       if (!toAccount) {
-        return reject(new Error(
-          `The to field: ${to} does not exist`
-        ));
+        return reject(new Error(`The to field: ${to} does not exist`));
       }
 
       if (toAccount.codeHash) {
         const { gasUsed } = new Interpreter({
-          storageTrie: state.storageTrieMap[toAccount.codeHash]
+          storageTrie: state.storageTrieMap[toAccount.codeHash],
         }).runCode(toAccount.code);
 
         if (gasUsed > gasLimit) {
-          return reject(new Error(
-            `Transaction needs more gas. Provided: ${gasLimit}. Needs: ${gasUsed}.`
-          ));
+          return reject(
+            new Error(
+              `Transaction needs more gas. Provided: ${gasLimit}. Needs: ${gasUsed}.`
+            )
+          );
         }
       }
 
@@ -107,15 +111,17 @@ class Transaction {
 
       if (fields.length !== expectedAccountDataFields.length) {
         return reject(
-          new Error(`The transaction account data has an incorrect number of fields`)
+          new Error(
+            `The transaction account data has an incorrect number of fields`
+          )
         );
       }
 
-      fields.forEach(field => {
+      fields.forEach((field) => {
         if (!expectedAccountDataFields.includes(field)) {
-          return reject(new Error(
-            `The field: ${field}, is unexpected for account data`
-          ));
+          return reject(
+            new Error(`The field: ${field}, is unexpected for account data`)
+          );
         }
       });
 
@@ -128,10 +134,12 @@ class Transaction {
       const { value } = transaction;
 
       if (value !== MINING_REWARD) {
-        return reject(new Error(
-          `The provided mining reward value: ${value} does not equal ` +
-          `the official value: ${MINING_REWARD}`
-        ));
+        return reject(
+          new Error(
+            `The provided mining reward value: ${value} does not equal ` +
+              `the official value: ${MINING_REWARD}`
+          )
+        );
       }
 
       return resolve();
@@ -145,24 +153,24 @@ class Transaction {
           switch (transaction.data.type) {
             case TRANSACTION_TYPE_MAP.CREATE_ACCOUNT:
               await Transaction.validateCreateAccountTransaction({
-                transaction
+                transaction,
               });
               break;
             case TRANSACTION_TYPE_MAP.TRANSACT:
               await Transaction.validateStandardTransaction({
                 state,
-                transaction
+                transaction,
               });
               break;
             case TRANSACTION_TYPE_MAP.MINING_REWARD:
               await Transaction.validateMiningRewardTransaction({
                 state,
-                transaction
+                transaction,
               });
               break;
             default:
               break;
-          } 
+          }
         } catch (error) {
           return reject(error);
         }
@@ -173,20 +181,20 @@ class Transaction {
   }
 
   static runTransaction({ state, transaction }) {
-    switch(transaction.data.type) {
+    switch (transaction.data.type) {
       case TRANSACTION_TYPE_MAP.TRANSACT:
         Transaction.runStandardTransaction({ state, transaction });
         console.log(
-          ' -- Updated account data to reflect the standard transaction'
+          " -- Updated account data to reflect the standard transaction"
         );
         break;
       case TRANSACTION_TYPE_MAP.CREATE_ACCOUNT:
         Transaction.runCreateAccountTransaction({ state, transaction });
-        console.log(' -- Stored the account data');
+        console.log(" -- Stored the account data");
         break;
       case TRANSACTION_TYPE_MAP.MINING_REWARD:
         Transaction.runMiningRewardTransaction({ state, transaction });
-        console.log(' -- Updated account data to reflect the mining reward');
+        console.log(" -- Updated account data to reflect the mining reward");
         break;
       default:
         break;
@@ -202,7 +210,7 @@ class Transaction {
 
     if (toAccount.codeHash) {
       const interpreter = new Interpreter({
-        storageTrie: state.storageTrieMap[toAccount.codeHash]
+        storageTrie: state.storageTrieMap[toAccount.codeHash],
       });
       ({ gasUsed, result } = interpreter.runCode(toAccount.code));
 
