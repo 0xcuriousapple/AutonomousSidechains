@@ -11,12 +11,13 @@ const State = require("../base/store/state");
 const Transaction = require("../base/transaction");
 const TransactionQueue = require("../base/transaction/transaction-queue");
 
-const Main_Keys = require("../public/keys/Mainchain_Keys.json");
+const Main_Keys = require("../public/channel_keys/Mainchain_Keys.json");
 const main_credentials = {
   publishKey: Main_Keys.Publish,
   subscribeKey: Main_Keys.Subscribe,
   secretKey: Main_Keys.Secret,
 };
+//console.log(p);
 
 const state = new State();
 const blockchain = new Blockchain({ state });
@@ -28,6 +29,18 @@ const pubsub = new PubSub({
 });
 const account = new Account();
 const transaction = Transaction.createTransaction({ account });
+
+//synchronization getting blocks from root
+//Pending : getting blocks from other peers decenterilized
+
+request("http://localhost:3000/mainchain/explorer", (error, response, body) => {
+  const { chain } = JSON.parse(body);
+
+  blockchain
+    .replaceChain({ chain })
+    .then(() => console.log("Synchronized blockchain with the root node"))
+    .catch((error) => console.error("Synchronization error:", error.message));
+});
 
 setTimeout(() => {
   pubsub.broadcastTransaction(transaction);

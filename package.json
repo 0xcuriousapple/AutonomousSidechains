@@ -40,6 +40,7 @@
     "morgan": "~1.9.0",
     "pubnub": "^4.27.3",
     "pug": "2.0.0-beta11",
+    "sync-request": "^6.1.0",
     "uuid": "^7.0.3"
   },
   "devDependencies": {

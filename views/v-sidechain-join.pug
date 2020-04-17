@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1= title
+  p Please enter ID of sidechain, you wish to join.
+    
+    form(class="form-signin" method="POST" action="./sync")
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            div.in
+              input(type="text" name="rootnode_address" placeholder="Rootnode address" class="form-control" required autofocus)
+              input(type="text" name="id" placeholder="ID of sidechain" class="form-control" required autofocus)
+              - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block','buttonClass'];
+              button(class=buttonClass type="submit") Proceed
+          
+          
+            
