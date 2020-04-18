@@ -140,6 +140,11 @@ router.post("/sync", function (req, res, next) {
         .catch((error) =>
           console.error("Synchronization error:", error.message)
         );
+
+      const transaction = Transaction.createTransaction({ account });
+      setTimeout(() => {
+        sidechain_instance.pubsub.broadcastTransaction(transaction);
+      }, 500);
       sidechainStore[Object.keys(sidechainStore).length] = sidechain_instance;
 
       res.render("v-sidechain-join-success", {
@@ -220,6 +225,20 @@ router.get("/active/wallet", (req, res, next) => {
   });
 });
 
+router.get("/active/wallet/transfer", (req, res, next) => {
+  //console.log(account.address);
+  const { id } = req.query;
+  to = req.body.to;
+  value = parseInt(req.body.value);
+  const transaction = Transaction.createTransaction({
+    account,
+    gasLimit: 0,
+    to,
+    value,
+  });
+  sidechainStore[id].pubsub.broadcastTransaction(transaction);
+  res.json({ transaction });
+});
 module.exports = router;
 
 // var temp;

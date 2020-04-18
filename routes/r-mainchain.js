@@ -114,6 +114,7 @@ router.get("/wallet", (req, res, next) => {
     address: account.address,
     state,
   });
+  console.log(balance);
   res.render("v-wallet", {
     title: "Wallet",
     address: account.address,
@@ -124,10 +125,19 @@ router.get("/wallet", (req, res, next) => {
 
 router.post("/transfer", function (req, res, next) {
   //Currently in front end only value transfer is mentioned but follwing code is appliable to contracts too
-  const { code, gasLimit, to, value } = req.body;
+  // const { code, gasLimit, to, value } = req.body;
+  // const transaction = Transaction.createTransaction({
+  //   account: !to ? new Account({ code }) : account,
+  //   gasLimit,
+  //   to,
+  //   value,
+  // });
+  //const { to, value } = req.body;
+  to = req.body.to;
+  value = parseInt(req.body.value);
   const transaction = Transaction.createTransaction({
-    account: !to ? new Account({ code }) : account,
-    gasLimit,
+    account,
+    gasLimit: 0,
     to,
     value,
   });

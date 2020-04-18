@@ -11,9 +11,6 @@ class sidechain {
     this.blockchain = new Blockchain({ state: this.state });
     this.transactionQueue = new TransactionQueue();
     this.credentials = credentials;
-    console.log("in cons side");
-    console.log(this.blockchain);
-
     this.pubsub = new PubSub({
       blockchain: this.blockchain,
       transactionQueue: this.transactionQueue,

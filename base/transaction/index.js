@@ -220,14 +220,13 @@ class Transaction {
     }
 
     const { value, gasLimit } = transaction;
-    const refund = gasLimit - gasUsed;
 
+    const refund = gasLimit - gasUsed;
     fromAccount.balance -= value;
     fromAccount.balance -= gasLimit;
     fromAccount.balance += refund;
     toAccount.balance += value;
     toAccount.balance += gasUsed;
-
     state.putAccount({ address: transaction.from, accountData: fromAccount });
     state.putAccount({ address: transaction.to, accountData: toAccount });
   }
