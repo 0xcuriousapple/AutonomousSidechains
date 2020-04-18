@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  P Choose option
+  a(class='button', href=`./explorer?id=${id}`) BlockExplorer
+  p
+  a(class='button', href=`./mine?id=${id}`) Mine Blocks 
+  p
+  a(class='button', href=`./wallet?id=${id}`) Wallet
+  p
+  - var pClasses=['indevelopment', 'mb-3', 'text-muted','mt-5'];
+  div(class=pClasses)
+    p In development 
+    a(class='button', href='./mainchain/deploy') Deploy Smart Contract
+    p
+    a(class='button', href='./mainchain/interact') Interact with Smart Contract

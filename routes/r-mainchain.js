@@ -109,7 +109,7 @@ router.post("/login/Verify", function (req, res, next) {
 // });
 
 router.get("/wallet", (req, res, next) => {
-  console.log(account.address);
+  //console.log(account.address);
   const balance = Account.calculateBalance({
     address: account.address,
     state,

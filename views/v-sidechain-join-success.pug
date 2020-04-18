@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p You Succefully Joined this sidechain and synchronized your version with root node
+  p Your local id of sidechain is #{id}
+  p You can access this sidechain from active sidechains option
+   - var pClasses=['mb-3', 'text-muted','mt-5'];
+  div(class=pClasses)
+    p Note :
+    p When you succesfully join any sidechain, that sidechain is stored in your memory with id given above.
+    p Other peers can get blockchain from you as rootnode adddress = your address and ID= id w.r.t. you
+    p Thanks   
+          
+          
+            

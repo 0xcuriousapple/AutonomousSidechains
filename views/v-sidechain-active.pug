@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+  p This are the active sidechains on this host.
+  p Select anyone to interact 
+  ul.list-group
+
+    each val, id in map
+      li(class='list-group-item') ID : #{id} 
+          
+          a(class="list-group-item list-group-item-success" href=`./active/index?id=${id}`) #{val.name}
+          p
+    
+
+  - var pClasses=['mb-3', 'text-muted','mt-5'];
+  div(class=pClasses)
+    p Note :
+    p In rootnode address, user have to enter the address of node from which they want to receive blocks and synchronize.
+    p In ID field user have to enter the id of chain with respect to root node.
+          
+            

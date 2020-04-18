@@ -38,3 +38,7 @@ a {
 .indevelopment {
   font-style: italic;
 }
+.redflag {
+  color: red;
+  font-weight: bolder;
+}

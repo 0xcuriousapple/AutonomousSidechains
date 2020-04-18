@@ -9,10 +9,13 @@ const CHANNELS_MAP = {
 
 class PubSub {
   constructor({ blockchain, transactionQueue, credentials }) {
-    console.log(credentials);
+    //console.log(credentials);
     this.credentials = JSON.parse(credentials);
     this.pubnub = new PubNub(this.credentials);
     this.blockchain = blockchain;
+    console.log("in cons pubsub");
+    console.log(blockchain);
+    console.log(transactionQueue);
     this.transactionQueue = transactionQueue;
     this.subscribeToChannels();
     this.listen();
@@ -64,6 +67,8 @@ class PubSub {
   }
 
   broadcastBlock(block) {
+    console.log("pubsub");
+    console.log(this.blockchain);
     this.publish({
       channel: CHANNELS_MAP.BLOCK,
       message: JSON.stringify(block),
@@ -71,6 +76,8 @@ class PubSub {
   }
 
   broadcastTransaction(transaction) {
+    //console.log("pubsub");
+    //console.log(this.blockchain);
     this.publish({
       channel: CHANNELS_MAP.TRANSACTION,
       message: JSON.stringify(transaction),

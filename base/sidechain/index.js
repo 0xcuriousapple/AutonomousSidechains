@@ -4,15 +4,18 @@ const State = require("../store/state");
 const TransactionQueue = require("../transaction/transaction-queue");
 
 class sidechain {
-  constructor({ id, credentials }) {
+  constructor({ id, credentials, name }) {
     this.identifier = id;
+    this.name = name;
     this.state = new State();
     this.blockchain = new Blockchain({ state: this.state });
     this.transactionQueue = new TransactionQueue();
     this.credentials = credentials;
+    console.log("in cons side");
+    console.log(this.blockchain);
 
     this.pubsub = new PubSub({
-      blockachian: this.blockchain,
+      blockchain: this.blockchain,
       transactionQueue: this.transactionQueue,
       credentials: JSON.stringify(credentials),
     });
