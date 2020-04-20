@@ -18,28 +18,8 @@ class Blockchain {
           this.chain.push(block);
 
           Block.runBlock({ block, state: this.state });
-
-          // const postTransact = (block) => {
-          //   return new Promise((resolve, reject) => {
-          //     request(
-          //       ,
-          //       {
-          //         method: "POST",
-          //         body: JSON.stringify(block),
-          //       },
-          //       (error, response, body) => {
-          //         return resolve(JSON.parse(body));
-          //       }
-          //     );
-          //   });
-          // };
-          // console.log(block);
-          // postTransact(block).then((postTransactResponse) => {
-          //   console.log("data upload to dashbaord");
-          // });
-
           request.post(
-            "http://localhost:1234/dashboardblock",
+            "https://bkdashboard.herokuapp.com/dashboardblock",
             {
               json: {
                 block,
@@ -47,11 +27,14 @@ class Blockchain {
             },
             (error, res, body) => {
               if (error) {
-                console.error(error);
-                return;
+                console.log("---Chrome : socket closed after 2 min")
+                //console.error(error);
+
               }
-              console.log(`statusCode: ${res.statusCode}`);
-              console.log(body);
+              else {
+                console.log(`statusCode: ${res.statusCode}`);
+                console.log(body);
+              }
             }
           );
 

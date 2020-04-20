@@ -71,7 +71,7 @@ router.post("/new/success", function (req, res, next) {
     },
   };
   request.post(
-    "http://localhost:1234/dashboardsidechain",
+    "https://bkdashboard.herokuapp.com/dashboardsidechain",
     {
       json: {
         obj,
@@ -79,11 +79,13 @@ router.post("/new/success", function (req, res, next) {
     },
     (error, res, body) => {
       if (error) {
-        console.error(error);
-        return;
+        //console.error(error);
+        console.log("---Chrome : socket closed after 2 min")
       }
-      console.log(`statusCode: ${res.statusCode}`);
-      console.log(body);
+      else {
+        console.log(`statusCode: ${res.statusCode}`);
+        console.log(body);
+      }
     }
   );
 

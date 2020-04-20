@@ -37,8 +37,9 @@ let { obj } = {
     address: account.address,
   },
 };
+
 request.post(
-  "http://localhost:1234/dashboardpeer",
+  "https://bkdashboard.herokuapp.com/dashboardpeer",
   {
     json: {
       obj,
@@ -46,11 +47,14 @@ request.post(
   },
   (error, res, body) => {
     if (error) {
-      console.error(error);
-      return;
+      // console.error(error);
+      console.log("---Chrome : socket closed after 2 min")
     }
-    console.log(`statusCode: ${res.statusCode}`);
-    console.log(body);
+    else {
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(body);
+    }
+
   }
 );
 //synchronization getting blocks from root
