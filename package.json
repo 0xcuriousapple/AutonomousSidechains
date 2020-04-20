@@ -33,6 +33,7 @@
     "debug": "~2.6.9",
     "elliptic": "^6.5.2",
     "express": "^4.17.1",
+    "express-sse": "^0.5.3",
     "http-errors": "~1.6.2",
     "jest": "^24.9.0",
     "js-sha3": "^0.8.0",
@@ -40,6 +41,7 @@
     "morgan": "~1.9.0",
     "pubnub": "^4.27.3",
     "pug": "2.0.0-beta11",
+    "socket.io": "^2.3.0",
     "sync-request": "^6.1.0",
     "uuid": "^7.0.3"
   },

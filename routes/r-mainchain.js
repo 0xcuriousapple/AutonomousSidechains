@@ -10,6 +10,7 @@ const PubSub = require("../base/api/pubsub");
 const State = require("../base/store/state");
 const Transaction = require("../base/transaction");
 const TransactionQueue = require("../base/transaction/transaction-queue");
+const SSE = require('express-sse');
 
 const Main_Keys = require("../public/channel_keys/Mainchain_Keys.json");
 const main_credentials = {
@@ -30,6 +31,28 @@ const pubsub = new PubSub({
 const account = new Account();
 const transaction = Transaction.createTransaction({ account });
 
+//sending data to dashboard
+let { obj } = {
+  obj: {
+    address: account.address,
+  },
+};
+request.post(
+  "http://localhost:1234/dashboardpeer",
+  {
+    json: {
+      obj,
+    },
+  },
+  (error, res, body) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    console.log(`statusCode: ${res.statusCode}`);
+    console.log(body);
+  }
+);
 //synchronization getting blocks from root
 //Pending : getting blocks from other peers decenterilized
 
@@ -145,4 +168,17 @@ router.post("/transfer", function (req, res, next) {
   res.json({ transaction });
 });
 
+var sse = new SSE();
+router.get('/stream', sse.init);
+
+router.get("/trie", function (req, res, next) {
+  res.render("v-trie", {
+    title: "State Trie"
+  });
+  sse.send('message');
+  sse.send('message', 'message');
+  //sse.send('message', eventName);
+
+
+});
 module.exports = router;

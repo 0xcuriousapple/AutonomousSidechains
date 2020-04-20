@@ -62,7 +62,30 @@ router.post("/new/success", function (req, res, next) {
 
   //mining this transaction as there is single user only
 
-  //Storing in map
+  //sending data to dashboard
+  let { obj } = {
+    obj: {
+      name: this.name,
+      address: req.protocol + '://' + req.get('host'),
+      id: this.id
+    },
+  };
+  request.post(
+    "http://localhost:1234/dashboardsidechain",
+    {
+      json: {
+        obj,
+      },
+    },
+    (error, res, body) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+      console.log(`statusCode: ${res.statusCode}`);
+      console.log(body);
+    }
+  );
 
   //console.log(Object.keys(sidechainStore).length);
 
@@ -189,7 +212,7 @@ router.get("/active/mine", (req, res, next) => {
 
   const lastBlock =
     sidechainStore[id].blockchain.chain[
-      sidechainStore[id].blockchain.chain.length - 1
+    sidechainStore[id].blockchain.chain.length - 1
     ];
   const block = Block.mineBlock({
     lastBlock,
