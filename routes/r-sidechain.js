@@ -27,6 +27,8 @@ router.post("/new/success", function (req, res, next) {
   //   subscribeKey: req.body.pubkey,
   //   secretKey: req.body.pubkey,
   // };
+
+  //for testing purpose keeping it constant
   const credentials = {
     publishKey: "pub-c-b4ef5ca9-5b50-44f5-a57e-0894ab85c8b1",
     subscribeKey: "sub-c-1a6ad124-7d8f-11ea-8ca3-9e2d2a3ca26d",
