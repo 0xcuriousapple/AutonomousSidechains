@@ -18,11 +18,14 @@ If you want to open it on differnt port set port="port" and then npm run beta
 * base : base modules like account,block..
 * bin  : www 
 * public : css,js, channel keys
-* routes : index.js:homepage, r-mainchain : handles req of main, r-sidechain : handles req of sidechain
-* views  : .pug files (html templates) [short intro of how pug works](https://freshman.tech/learn-node/)
+* routes 
+    * index.js:homepage, 
+    * r-mainchain : handles req of main, 
+    * r-sidechain : handles req of sidechain
+* views  : .pug files (html templates) [2min Read : How pug works](https://freshman.tech/learn-node/)
 * app.js : start server
 
-Currently for sidechain channel I have kept it constanr for testing purpose, no matter what you pass.
+Currently for sidechain channel I have kept it constant for testing purpose.
 you can change this in r-sidechain
 
 
