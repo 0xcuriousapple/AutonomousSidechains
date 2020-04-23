@@ -23,12 +23,12 @@ const main_credentials = {
 const state = new State();
 const blockchain = new Blockchain({ state });
 const transactionQueue = new TransactionQueue();
-const pubsub = new PubSub({
+pubsubmain = new PubSub({
   blockchain,
   transactionQueue,
   credentials: JSON.stringify(main_credentials),
 });
-const account = new Account();
+global.account = new Account();
 const transaction = Transaction.createTransaction({ account });
 
 //sending data to dashboard
@@ -70,7 +70,7 @@ request("http://localhost:3000/mainchain/explorer", (error, response, body) => {
 });
 
 setTimeout(() => {
-  pubsub.broadcastTransaction(transaction);
+  pubsubmain.broadcastTransaction(transaction);
 }, 500);
 
 /* GET home page. */
@@ -82,7 +82,19 @@ router.get("/explorer", function (req, res, next) {
   const { chain } = blockchain;
   res.json({ chain });
 });
+router.get("/txqueue", function (req, res, next) {
+  res.json(transactionQueue);
+});
+router.get("/balance", (req, res, next) => {
+  const { address } = req.query;
 
+  const balance = Account.calculateBalance({
+    address: address || account.address,
+    state,
+  });
+
+  res.json({ balance });
+});
 router.get("/mine", (req, res, next) => {
   const lastBlock = blockchain.chain[blockchain.chain.length - 1];
   const block = Block.mineBlock({
@@ -95,7 +107,7 @@ router.get("/mine", (req, res, next) => {
   blockchain
     .addBlock({ block, transactionQueue })
     .then(() => {
-      pubsub.broadcastBlock(block);
+      pubsubmain.broadcastBlock(block);
 
       res.json({ block });
     })
@@ -145,7 +157,6 @@ router.get("/wallet", (req, res, next) => {
   res.render("v-wallet", {
     title: "Wallet",
     address: account.address,
-
     balance: balance,
   });
 });
@@ -168,21 +179,9 @@ router.post("/transfer", function (req, res, next) {
     to,
     value,
   });
-  pubsub.broadcastTransaction(transaction);
+  pubsubmain.broadcastTransaction(transaction);
   res.json({ transaction });
 });
 
-var sse = new SSE();
-router.get('/stream', sse.init);
 
-router.get("/trie", function (req, res, next) {
-  res.render("v-trie", {
-    title: "State Trie"
-  });
-  sse.send('message');
-  sse.send('message', 'message');
-  //sse.send('message', eventName);
-
-
-});
 module.exports = router;

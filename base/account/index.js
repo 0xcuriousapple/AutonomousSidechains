@@ -5,7 +5,6 @@ class Account {
   constructor({ code } = {}) {
     this.keyPair = ec.genKeyPair();
     this.address = this.keyPair.getPublic().encode("hex");
-    this.privateKey = this.keyPair.getPrivate().toString();
     this.balance = STARTING_BALANCE;
     this.code = code || [];
     this.generateCodeHash();
@@ -38,5 +37,6 @@ class Account {
   static calculateBalance({ address, state }) {
     return state.getAccount({ address }).balance;
   }
+
 }
 module.exports = Account;

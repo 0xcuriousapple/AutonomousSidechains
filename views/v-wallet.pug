@@ -6,7 +6,7 @@ block content
   p Balance :#{balance}
   p Transfer funds :
 
-  form(class="form-signin" method="POST" action="./transfer")
+  form(class="form-signin" method="POST" action=`./transfer?id=${id}`)
             #error
                 if error
                     p.text-danger Error!!!

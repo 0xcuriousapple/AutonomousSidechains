@@ -4,7 +4,7 @@ const State = require("../store/state");
 const TransactionQueue = require("../transaction/transaction-queue");
 
 class sidechain {
-  constructor({ id, credentials, name }) {
+  constructor({ id, credentials, name, exitaccount, conversionfactor }) {
     this.identifier = id;
     this.name = name;
     this.state = new State();
@@ -16,6 +16,8 @@ class sidechain {
       transactionQueue: this.transactionQueue,
       credentials: JSON.stringify(credentials),
     });
+    this.exitaccount = exitaccount; //Address only
+    this.conversionfactor = conversionfactor;
   }
 
   //functions of sidechain
