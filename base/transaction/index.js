@@ -7,6 +7,7 @@ const TRANSACTION_TYPE_MAP = {
   CREATE_ACCOUNT: "CREATE_ACCOUNT",
   TRANSACT: "TRANSACT",
   MINING_REWARD: "MINING_REWARD",
+  BLOCK_HEADER: "BLOCK_HEADER"
 };
 
 class Transaction {
@@ -137,7 +138,7 @@ class Transaction {
         return reject(
           new Error(
             `The provided mining reward value: ${value} does not equal ` +
-              `the official value: ${MINING_REWARD}`
+            `the official value: ${MINING_REWARD}`
           )
         );
       }

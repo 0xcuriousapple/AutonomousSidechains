@@ -43,8 +43,8 @@ router.post("/new/success", function (req, res, next) {
 
   id = Object.keys(sidechainStore).length;
   name = req.body.name;
-  conversionfactor = 2;
-  freezing_amount = 100;
+  conversionfactor = parseInt(req.body.conversionfactor);
+  freezing_amount = parseInt(req.body.freezing_amount);
 
   //Creating exit account for this chain
   exitaccount = new Account();
@@ -68,15 +68,15 @@ router.post("/new/success", function (req, res, next) {
   }, 500);
 
   //Freezing/locking amount in main master account
-  setTimeout(() => {
-    const ftransaction = Transaction.createTransaction({
-      account,
-      gasLimit: 0,
-      to: masteraccount.address,
-      value: freezing_amount,
-    });
-    pubsubmain.broadcastTransaction(ftransaction);
-  }, 15000);
+
+  const ftransaction = Transaction.createTransaction({
+    account,
+    gasLimit: 0,
+    to: masteraccount.address,
+    value: freezing_amount,
+  });
+  pubsubmain.broadcastTransaction(ftransaction);
+
 
 
   //sending data to dashboard
@@ -107,7 +107,6 @@ router.post("/new/success", function (req, res, next) {
   );
 
   //console.log(Object.keys(sidechainStore).length);
-
   res.render("v-sidechain-new-success", {
     title: "New Sidechain",
     id: id,
@@ -306,38 +305,20 @@ router.get("/active/wallet", (req, res, next) => {
     balance: balance,
   });
 });
-router.get("/active/exit", (req, res, next) => {
+router.get("/active/txqueue", (req, res, next) => {
   //console.log(account.address);
   const { id } = req.query;
-  sidechain_instance = sidechainStore[id];
-
-  //burn
+  res.json(sidechainStore[id].transactionQueue)
+});
+router.get("/active/balance", (req, res, next) => {
+  //console.log(account.address);
+  const { address } = req.query;
+  id = 0;
   const balance = Account.calculateBalance({
-    address: account.address,
+    address,
     state: sidechainStore[id].state,
   });
-  const btransaction = Transaction.createTransaction({
-    account,
-    gasLimit: 0,
-    to: sidechain_instance.exitaccount.address,
-    value: balance,
-  });
-  sidechainStore[id].pubsub.broadcastTransaction(btransaction);
-  console.log(`All assets in sidechain ${id} for address ${account.address} are sent to be burned (Mining pending)`)
-
-  //release funds
-  const amount = balance / sidechain_instance.conversionfactor;
-  console.log(amount);
-  const rtransaction = Transaction.createTransaction({
-    account: masteraccount,
-    gasLimit: 0,
-    to: account.address,
-    value: amount,
-  });
-  pubsubmain.broadcastTransaction(rtransaction);
-  delete sidechainStore.id;
-  res.json({ btransaction, rtransaction })
-
+  res.json({ balance })
 });
 router.post("/active/transfer", function (req, res, next) {
   const { id } = req.query;
@@ -351,6 +332,91 @@ router.post("/active/transfer", function (req, res, next) {
   });
   sidechainStore[id].pubsub.broadcastTransaction(transaction);
   res.json({ transaction });
+});
+
+router.get("/active/exit", function (req, res, next) {
+  const { id } = req.query;
+  const balance = Account.calculateBalance({
+    address: account.address,
+    state: sidechainStore[id].state,
+  });
+
+  const conversionfactor = sidechainStore[id].conversionfactor;
+  relbal = parseInt(conversionfactor) / balance;
+  res.render("v-sidechain-active-exit", {
+    title: "Confirm",
+    relbal: relbal,
+    id: id,
+    balance: balance,
+  });
+
+});
+router.post("/active/exitconfirm", (req, res, next) => {
+  //console.log(account.address);
+  const { id } = req.query;
+  sidechain_instance = sidechainStore[id];
+
+  //burn
+  const balance = Account.calculateBalance({
+    address: account.address,
+    state: sidechainStore[id].state,
+  });
+  const btransaction = Transaction.createTransaction({
+    account,
+    gasLimit: 0,
+    to: sidechain_instance.exitaccount,
+    value: balance,
+  });
+  sidechainStore[id].pubsub.broadcastTransaction(btransaction);
+  console.log(`All assets in sidechain ${id} for address ${account.address} are sent to be burned (Mining pending)`)
+
+  //release funds
+  const amount = balance / sidechain_instance.conversionfactor;
+  const rtransaction = Transaction.createTransaction({
+    account: masteraccount,
+    gasLimit: 0,
+    to: account.address,
+    value: amount,
+  });
+  pubsubmain.broadcastTransaction(rtransaction);
+  console.log(` length : ${Object.keys(sidechainStore).length}`)
+  delete sidechainStore[id];
+  console.log(` length : ${Object.keys(sidechainStore).length}`)
+  res.json({ btransaction, rtransaction })
+
+});
+router.get("/active/convert", function (req, res, next) {
+  const { id } = req.query;
+  res.render("v-sidechain-active-convert", {
+    title: "Conversion",
+    id: id,
+  });
+});
+router.post("/active/convertconfirm", function (req, res, next) {
+  const { id } = req.query;
+  sidechain_instance = sidechainStore[id];
+
+  //burn
+  samount = parseInt(req.body.amount);
+  console.log(account);
+  const btransaction = Transaction.createTransaction({
+    account,
+    gasLimit: 0,
+    to: sidechain_instance.exitaccount,
+    value: samount,
+  });
+  sidechainStore[id].pubsub.broadcastTransaction(btransaction);
+
+  //release funds
+  const amount = samount / sidechain_instance.conversionfactor;
+  const rtransaction = Transaction.createTransaction({
+    account: masteraccount,
+    gasLimit: 0,
+    to: account.address,
+    value: amount,
+  });
+  pubsubmain.broadcastTransaction(rtransaction);
+  res.json({ btransaction, rtransaction })
 });
 module.exports = router;
 

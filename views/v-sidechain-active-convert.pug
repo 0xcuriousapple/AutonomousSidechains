@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  p Amount that you enter here will be converted into main chain currency
+  p Given amount in sidechain currency
+  p We Transfer the amount to unreachable address
+  p Divde the amount by conversion factor
+  p And relase that amount from master account of yours in mainchain to tx account in mainchain 
+    form(class="form-signin" method="POST" action=`./convertconfirm?id=${id}`)
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            div.in
+              input(type="text" name="amount" placeholder="Amount in sidechain currency" class="form-control" required autofocus)
+              - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block','buttonClass'];
+              button(class=buttonClass type="submit") Confirm
+  p
+  - var pClasses=['mb-3', 'text-muted','mt-5'];
+  div(class=pClasses)
+    p Note :
+
+          
+            

@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  p Once you exit all youe assets in this sidechain will be burned 
+  p You will no longer be able to access this sidechain
+  p Funds will be released to mainchain acccount    
+  p
+  p `Balance in this sidechain #{balance}`
+  p 'Balance to be transfered in main chain account calculated w.r.t to conversion factor #{relbal}'
+    form(class="form-signin" method="POST" action=`./exitconfirm?id=${id}`)
+            #error
+                if error
+                    p.text-danger Error!!!
+
+            div.in
+              - var buttonClass=['btn', 'btn-lg', 'btn-primary', 'btn-block','buttonClass'];
+              button(class=buttonClass type="submit") Confirm
+  p
+  - var pClasses=['mb-3', 'text-muted','mt-5'];
+  div(class=pClasses)
+    p Note :
+
+          
+            
