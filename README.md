@@ -4,8 +4,8 @@ This project has been developed under research we conducted to solve scalability
 Basically we implemented our own implemenation of <strong>plasma framework.</strong><br/>
 We wrote research paper for the same, will upload it once its published.<br/>
 
-## [Project Presentation](https://docs.google.com/presentation/d/1DsOSvJ8OdAVjQLiqv45RebK1eojyybEQ-7y2iwzeU_I/edit?usp=sharing)
-## [Algorithms, Code explanation & Installation Instructions](https://docs.google.com/presentation/d/1aIFxgLzPbZzdDyiI2MCerEFdT9ZTn_u_rjUqOxnWeyM/edit?usp=sharing)
+### [Project Presentation](https://docs.google.com/presentation/d/1DsOSvJ8OdAVjQLiqv45RebK1eojyybEQ-7y2iwzeU_I/edit?usp=sharing)
+### [Algorithms, Code explanation & Installation Instructions](https://docs.google.com/presentation/d/1aIFxgLzPbZzdDyiI2MCerEFdT9ZTn_u_rjUqOxnWeyM/edit?usp=sharing)
 ## Demos
 [Version 1.0](https://youtu.be/xG6YKWDomIg)
 [Dashboard](https://youtu.be/U9hz8xLFXIg)
