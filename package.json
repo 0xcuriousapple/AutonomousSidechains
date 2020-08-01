@@ -31,7 +31,7 @@
     "cookie-parser": "~1.4.3",
     "core-js": "^3.6.5",
     "debug": "~2.6.9",
-    "elliptic": "^6.5.2",
+    "elliptic": "^6.5.3",
     "express": "^4.17.1",
     "express-sse": "^0.5.3",
     "http-errors": "~1.6.2",
