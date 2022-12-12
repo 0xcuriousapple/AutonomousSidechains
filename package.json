@@ -32,7 +32,7 @@
     "core-js": "^3.6.5",
     "debug": "~2.6.9",
     "elliptic": "^6.5.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-sse": "^0.5.3",
     "http-errors": "~1.6.2",
     "jest": "^24.9.0",
